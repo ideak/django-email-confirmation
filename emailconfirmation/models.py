@@ -6,12 +6,11 @@ from django.db import models, IntegrityError
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.contrib.sites.models import Site
-from django.contrib.auth.models import User
 from django.utils.hashcompat import sha_constructor
 from django.utils.translation import gettext_lazy as _
 
 from emailconfirmation.signals import email_confirmed
-from emailconfirmation.utils import get_send_mail
+from emailconfirmation.utils import get_send_mail, get_user_model
 send_mail = get_send_mail()
 
 # this code based in-part on django-registration
@@ -43,7 +42,7 @@ class EmailAddressManager(models.Manager):
 
 class EmailAddress(models.Model):
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(get_user_model())
     email = models.EmailField()
     verified = models.BooleanField(default=False)
     primary = models.BooleanField(default=False)
